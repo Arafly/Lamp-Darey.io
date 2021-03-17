@@ -86,7 +86,94 @@ Check your PHP version once the installation is complete with:
 
   We’ll create a directory structure within /var/www for the **dodo_domain** site, leaving /var/www/html in place as the default placeholder to be served if a client request doesn’t match any other sites.
 
+  Create the directory for your_domain as follows and assign ownership of the directory with the $USER environment variable, which will reference your current system use:
 
+  `sudo mkdir /var/www/dodo_domain`
+  
+  `sudo chown -R $USER:$USER /var/www/dodo_domain`
 
+  Then, open a new configuration file in Apache’s sites-available directory using your preferred command-line editor. Here, I’ll use vi:
+
+  `sudo vi /etc/apache2/sites-available/dodo_domain.conf`
+
+  This creates and opens a blank file where you can paste this: 
+
+<VirtualHost *:80>
+    ServerName your_domain
+    ServerAlias www.your_domain
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/your_domain
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+Save and close by typing **:wq**
+
+Use the plugin `a2ensite` to enable the new virtual host:
+
+`sudo a2ensite dodo_domain`
+
+You may want to disable the default website that comes installed with Apache, because in this case Apache’s default configuration would overwrite your virtual host. To disable Apache’s default website, type:
+
+`sudo a2dissite 000-default`
+
+Ensure your configuration file doesn’t contain syntax errors, and reload Apache so these changes take effect:
+
+`sudo apache2ctl configtest`
+
+`sudo systemctl reload apache2`
+
+Your new website is now active, but the web root /var/www/dodo_domain is still empty. Create an index.html file in that location so that we can test that the virtual host works as expected:
+
+`sudo vi /var/www/your_domain/index.html`
+
+Paste in:
+
+<html>
+  <head>
+    <title>your_domain website</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+
+    <p>This is the landing page of <strong>your_domain</strong>.</p>
+  </body>
+</html>
+
+Now go to your browser and access your server’s IP address once again:
+*image
+
+You can leave this file in place as a temporary landing page for your application until you set up an index.php file to replace it. Once you do that, remember to remove or rename the index.html file from your document root, as it would take precedence over an index.php file by default.
+
+You can change this behavior, you’ll need to edit the /etc/apache2/mods-enabled/dir.conf file and modify the order in which the index.php file is listed within the DirectoryIndex directive:
+
+`sudo vi /etc/apache2/mods-enabled/dir.conf`
+
+ Place the index.php before the index.html. Save, close and reload Apache.
+
+Finally, we create a PHP test script to confirm that Apache is able to handle and process requests for PHP files.
+
+Create a new file named info.php inside your custom web root folder: 
+
+`sudo vi /var/www/dodo_domain/info.php`
+
+Paste in this: 
+
+`<?php
+phpinfo();`
+
+When you are finished, save and close the file.
+
+To test this script, go to your web browser and access your server’s domain name or IP address, followed by the script name, which in ourcase is info.php:
+
+http://server_domain_or_IP/info.php
+
+You’ll see a page similar to this:*mage
+
+ it’s best to remove the file you created as it contains sensitive information about your PHP environment -and your Ubuntu server.
+
+ `sudo rm /var/www/your_domain/info.php`
+
+ So there you go! You've successfully set up your LAMP stack on an Ubuntu. 
 
 
