@@ -22,7 +22,16 @@ Run this following commands as a root user using **sudo su -** . Input your pass
 
 `$ ufw status`
 
-![](/assets/24.png)
+```
+Output
+
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                                   
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+```
 
 ### Installing Apache and updating the firewall
 
@@ -30,13 +39,42 @@ Run this following commands as a root user using **sudo su -** . Input your pass
 `sudo apt install apache2`
 `sudo ufw app list`
 
-![](/assets/29.png)
+```
+Output
+
+Available applications:
+  Apache
+  Apache Full
+  Apache Secure
+  CUPS
+  OpenSSH
+
+```
 
 You can go a step further and check if apache2 is running, by typing:
 
 `systemctl status apache2`
 
-![](/assets/28.png)
+```
+Output
+
+● apache2.service - The Apache HTTP Server
+     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2021-03-15 17:10:18 WAT; 1 day 23h ago
+       Docs: https://httpd.apache.org/docs/2.4/
+   Main PID: 21102 (apache2)
+      Tasks: 7 (limit: 2938)
+     Memory: 13.9M
+     CGroup: /system.slice/apache2.service
+             ├─21102 /usr/sbin/apache2 -k start
+             ├─22474 /usr/sbin/apache2 -k start
+             ├─22475 /usr/sbin/apache2 -k start
+             ├─22476 /usr/sbin/apache2 -k start
+             ├─22477 /usr/sbin/apache2 -k start
+             ├─22478 /usr/sbin/apache2 -k start
+             └─22482 /usr/sbin/apache2 -k start
+
+```
 
 The only one we require at this point is "Apache", since there's no TLS/SSL certificate configured yet on the server.
 
@@ -45,8 +83,19 @@ Use the Apache profile to only allow traffic on port 80:
 `sudo ufw allow in "Apache"`
 
 `sudo ufw status`
+```
+Output
 
-![](/assets/36.png)
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Apache                     ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Apache (v6)                ALLOW       Anywhere (v6)   
+```
+
 At this point you can check your ip address on the browser to see this: 
 
 ![](/assets/38.png)
@@ -72,8 +121,25 @@ When you're done, test if you're able to log in
 You can clear your screen with "CTRL + L" and exit the MySQL console, by typing:
 
 `mysql> exit`
+```
+Output 
 
-![](/assets/65.png)
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> exit
+Bye
+
+```
 
 However, it is very important to note
 > even though you didn’t need to provide a password to connect as the root user
@@ -98,7 +164,15 @@ Check your PHP version once the installation is complete with:
 
 `php -v`
 
-![](/assets/82.png)
+```
+Output
+
+PHP 7.4.3 (cli) (built: Oct  6 2020 15:47:56) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Zend OPcache v7.4.3, Copyright (c), by Zend Technologies
+
+```
 
 ✨Yippee!✨ Your LAMP stack is fully operational, but...wait a minute. Before you can test your setup with a PHP script, it’s best to set up a proper Apache Virtual Host to hold your website’s files and folders.
 
@@ -164,7 +238,7 @@ Paste in:
 
 Now go to your browser and access your server’s IP address once again:
 
-![](/assets/145.png)
+![Landing page](/assets/145.png)
 
 
 You can leave this file in place as a temporary landing page for your application until you set up an index.php file to replace it. Once you do that, remember to remove or rename the index.html file from your document root, as it would take precedence over an index.php file by default.
