@@ -1,4 +1,4 @@
-## Set-up & Install LAMP Stack on Ubuntu 20.04
+# Set-up & Install LAMP Stack on Ubuntu 20.04
 This guide documents how to set up a LAMP stack on my Ubuntu living in a virtualbox on Windows10
 
 It is majorly a 4-step process. Which are:
@@ -238,7 +238,7 @@ Paste in:
 
 Now go to your browser and access your server’s IP address once again:
 
-![](./assets/145.png)
+![](https://github.com/Arafly/Lamp-Darey.io/blob/master/assets/145.PNG)
 
 
 You can leave this file in place as a temporary landing page for your application until you set up an index.php file to replace it. Once you do that, remember to remove or rename the index.html file from your document root, as it would take precedence over an index.php file by default.
